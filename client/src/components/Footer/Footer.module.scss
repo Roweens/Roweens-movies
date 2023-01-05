@@ -1,0 +1,65 @@
+:global {
+  body[data-theme='light'] {
+    --footer-color: var(--white-200);
+    --footer-text-color: var(--gray-500);
+  }
+  body[data-theme='dark'] {
+    --footer-color: var(--gray-500);
+    --footer-text-color: var(--white-200);
+  }
+}
+
+.footer {
+  font-family: 'Poppins', sans-serif;
+  color: var(--footer-text-color);
+  background-color: var(--footer-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  .footerIcons {
+    font-size: 25px;
+    .footerIcon {
+      cursor: pointer;
+      margin-right: 45px;
+      &:last-child {
+        margin-right: 0;
+      }
+      &:hover {
+        color: #337fc3;
+      }
+    }
+  }
+  .footerNavbar {
+    display: flex;
+    gap: 50px;
+    margin-top: 35px;
+    .footerNavbarItem {
+      cursor: pointer;
+      list-style: none;
+      &:hover {
+        color: #337fc3;
+      }
+    }
+  }
+  .footerLine {
+    width: 60%;
+    height: 1px;
+    background-color: var(--footer-text-color);
+    margin: 40px 0 40px 0;
+  }
+  .footerOwnership {
+    padding-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    font-size: 18px;
+    .footerOwnershipDate {
+      font-weight: 600;
+    }
+    .footerOwnershipLink {
+      color: var(--footer-text-color);
+      text-decoration: none;
+    }
+  }
+}

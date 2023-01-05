@@ -1,0 +1,35 @@
+:global {
+  body[data-theme='light'] {
+    --top-color: var(--white-100);
+    --top-title-color: var(--gray-500);
+  }
+  body[data-theme='dark'] {
+    --top-color: var(--gray-500);
+    --top-title-color: var(--white-200);
+  }
+}
+
+.topMovies {
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--top-color);
+  padding: 0 50px 100px 50px;
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+
+  .topMoviesTitle {
+    font-family: 'Poppins', sans-serif;
+    color: var(--top-title-color);
+    margin-bottom: 20px;
+    cursor: pointer;
+    .topMoviesColored {
+      color: #337fc3;
+    }
+  }
+  .topMoviesWrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 200px));
+    gap: 20px;
+    justify-content: space-between;
+  }
+}

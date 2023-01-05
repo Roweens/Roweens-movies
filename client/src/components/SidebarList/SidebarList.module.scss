@@ -1,0 +1,33 @@
+:global {
+  body[data-theme='light'] {
+    --sidebar-list-color: var(--white-200);
+    --sidebar-list-text-color: var(--gray-500);
+  }
+  body[data-theme='dark'] {
+    --sidebar-list-color: var(--black);
+    --sidebar-list-text-color: var(--white-100);
+  }
+}
+.sidebarList {
+  color: var(--sidebar-list-text-color);
+  flex: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30px;
+  background-color: var(--sidebar-list-color);
+  .sidebarListWrapper {
+    .sidebarListCategory {
+      .sidebarListCategoryTitle {
+        font-family: 'Poppins', sans-serif;
+        margin-bottom: 20px;
+      }
+    }
+    .sidebarListLine {
+      width: 80%;
+      height: 2px;
+      background-color: rgb(72, 71, 68);
+      margin: 40px auto;
+    }
+  }
+}

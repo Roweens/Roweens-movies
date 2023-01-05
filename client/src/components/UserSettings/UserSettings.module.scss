@@ -1,0 +1,156 @@
+:global {
+  body[data-theme='light'] {
+    --settings-color: white;
+    --settings-font-color: var(--gray-500);
+    --settings-border-color: black;
+  }
+  body[data-theme='dark'] {
+    --settings-color: var(--gray-500);
+    --settings-font-color: var(--white-100);
+    --settings-border-color: none;
+  }
+}
+
+.userSettings {
+  width: 50%;
+  background-color: var(--settings-color);
+  margin: 0 auto;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  padding: 50px 150px 50px 50px;
+  color: var(--settings-font-color);
+  border: 1px solid black;
+  .userSettingsTitle {
+    font-size: 45px;
+    margin-bottom: 50px;
+  }
+
+  .userSettingsForm {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .userSettingsMain {
+      flex-basis: 60%;
+      .userSettingsInputWrapper {
+        margin-top: 25px;
+        .userSettingsLabel {
+          display: block;
+          font-size: 20px;
+          margin-bottom: 6px;
+        }
+        .userSettingsInput {
+          outline: none;
+          border: 1px solid var(--login-border-color);
+          padding: 8px 8px;
+          border-radius: 5px;
+          font-size: 18px;
+          transition: border 0.05s ease;
+          &:focus {
+            border: 2px solid #337fc3;
+          }
+        }
+      }
+
+      .userSettingsFileInputWrapper {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 40px;
+        .userSettingsImg {
+          width: 90px;
+          height: 90px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        .userSettingsFileInput {
+          display: none;
+        }
+        .userSettingsFileLabel {
+          .userSettingsFileIcon {
+            font-size: 45px;
+            transition: transform 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+            &:hover {
+              transform: scale(1.1);
+              color: #337fc3;
+            }
+          }
+        }
+      }
+    }
+    .userSettingsAdditional {
+      flex-basis: 30%;
+      .userSettingsAdditionalTitle {
+        margin-bottom: 10px;
+        font-size: 20px;
+      }
+      .userSettingsGenderWrapper {
+        position: relative;
+        .userSettingsGender {
+          display: flex;
+          width: 150px;
+          color: black;
+          background-color: white;
+          padding: 5px 10px;
+          justify-content: space-between;
+          align-items: baseline;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .userSettingsRadioInputWrapper {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          top: 120%;
+          background-color: white;
+          color: black;
+          padding: 0 30px 10px 10px;
+          border-radius: 4px;
+          .userSettingsRadioInput {
+            display: none;
+          }
+          .userSettingsRadioLabel {
+            cursor: pointer;
+            margin-top: 10px;
+          }
+        }
+      }
+      .userSettingsAdditionalDateTitle {
+        margin-top: 30px;
+        font-size: 20px;
+      }
+      .userSettingsDate {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        .userSettingsDateSelectWrapper {
+          .userSettingsDateSelect {
+            font-family: 'Poppins', sans-serif;
+            border-radius: 4px;
+            padding: 5px 10px 5px 0px;
+          }
+        }
+      }
+    }
+    .userSettingsFormButton {
+      font-family: 'Poppins', sans-serif;
+      width: 200px;
+      margin-top: 40px;
+      padding: 6px 12px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+      background-color: #337fc3;
+      color: white;
+      &:hover {
+        transform: scale(1.05);
+        filter: brightness(0.9);
+      }
+    }
+  }
+}

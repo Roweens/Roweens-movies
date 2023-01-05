@@ -1,0 +1,112 @@
+:global {
+  body[data-theme='light'] {
+    --login-color: var(--white-200);
+    --login-font-color: var(--gray-500);
+    --login-border-color: black;
+  }
+  body[data-theme='dark'] {
+    --login-color: var(--gray-500);
+    --login-font-color: var(--white-100);
+    --login-border-color: none;
+  }
+}
+
+.registerFormWrapper {
+  background-color: var(--login-color);
+  color: var(--login-font-color);
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+  padding: 25px 90px 50px 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  border-radius: 8px;
+  .registerFormTitle {
+    margin-bottom: 10px;
+    color: #337fc3;
+  }
+
+  .registerForm {
+    .registerFormInputWrapper {
+      margin-top: 30px;
+      .registerFormLabel {
+        display: block;
+        margin-top: 10px;
+        font-size: 22px;
+        margin-bottom: 5px;
+      }
+      .registerFormInput {
+        outline: none;
+        border: 1px solid var(--login-border-color);
+        padding: 8px 8px;
+        border-radius: 5px;
+        font-size: 18px;
+        transition: border 0.05s ease;
+        &:focus {
+          border: 2px solid #337fc3;
+        }
+      }
+      .registerFormFileInput {
+        display: none;
+      }
+      .registerFormFileLabel {
+        .registerFormFileIcon {
+          font-size: 40px;
+          transition: transform 0.3s ease, color 0.3s ease;
+          cursor: pointer;
+          &:hover {
+            transform: scale(1.1);
+            color: #337fc3;
+          }
+        }
+      }
+    }
+    .registerFormRegisterButton,
+    .registerFormLoginButton {
+      display: block;
+      background-color: white;
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+      padding: 5px 20px;
+      margin: 0 auto;
+      width: 200px;
+      cursor: pointer;
+      font-size: 20px;
+      margin-top: 30px;
+      border-radius: 5px;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      &:hover {
+        transform: scale(1.1);
+        filter: brightness(0.85);
+      }
+    }
+
+    .registerFormRegisterButton {
+      background-color: #337fc3;
+      color: white;
+    }
+  }
+  .registerFormLoginButton {
+    background-color: var(--login-font-color);
+    color: var(--login-color);
+    display: block;
+    background-color: white;
+    border: none;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    padding: 5px 20px;
+    margin: 0 auto;
+    width: 200px;
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    &:hover {
+      transform: scale(1.1);
+      filter: brightness(0.85);
+    }
+  }
+}

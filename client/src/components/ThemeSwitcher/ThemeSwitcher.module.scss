@@ -1,0 +1,31 @@
+:global {
+  body[data-theme='light'] {
+    --theme-text-color: var(--black);
+  }
+  body[data-theme='dark'] {
+    --theme-text-color: var(--gray-300);
+  }
+}
+
+.themeSwitcher {
+  transition: all 0.2s ease-out;
+  &:hover {
+    transform: scale(1.05);
+  }
+  .sibebarMenuItem {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+    cursor: pointer;
+    color: var(--theme-text-color);
+  }
+  .sibebarMenuItemText {
+    font-size: 18px;
+  }
+
+  .sidebarMenuIcon {
+    font-size: 22px;
+    margin-right: 15px;
+  }
+}
