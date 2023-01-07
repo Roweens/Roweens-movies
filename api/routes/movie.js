@@ -31,11 +31,47 @@ router.post('/add', async (req, res) => {
 
 //Get all movies
 
-router.get('/all', async (req, res) => {
+router.get('/', async (req, res) => {
+  const type = req.query.type;
+  const genre = req.query.genre;
+  const year = req.query.year;
+  const country = req.query.country;
+
+  console.log(req.query);
+
   try {
-    const movies = await Movie.find({});
+    let movies;
+    if (type) {
+      movies = await Movie.find({ type: type });
+    } else {
+      movies = await Movie.find({});
+    }
 
     res.status(201).json(movies);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+//Get one movie
+
+router.get('/:id', async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    res.status(200).json(movie);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+//Rate movie
+
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedMovie = await Movie.findById(req.body.id);
+    updatedMovie.ratings = [...updatedMovie.ratings, req.body.rating];
+    await updatedMovie.save();
+    res.status(200).json(updatedMovie);
   } catch (error) {
     res.status(500).json(error);
   }

@@ -1,10 +1,22 @@
 import styles from './SearchMovie.module.scss';
-import starWars from '../../assets/starwars.jpg';
+
 import { StarRating } from '../StarRating';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/auth-slice';
 
 export const SearchMovie = ({ movie }) => {
+  const [averageRating, setAverageRating] = useState(0);
   const PF = 'http://localhost:5000/images/';
+
+  useEffect(() => {
+    const sumRating = movie.ratings.reduce((prev, next) => prev + next, 0);
+    setAverageRating((sumRating / movie.ratings.length).toFixed(1));
+  }, [movie.ratings]);
+
+  const user = useSelector(selectUser);
+
   return (
     <div className={styles.searchMoviesListItem}>
       <div className={styles.searchMoviesListItemMain}>
@@ -37,7 +49,7 @@ export const SearchMovie = ({ movie }) => {
         </div>
       </div>
       <div className={styles.searchMoviesListItemAdd}>
-        <p className={styles.searchMoviesListItemRating}>9.3</p>
+        <p className={styles.searchMoviesListItemRating}>{averageRating}</p>
         <div className={styles.searchMoviesListItemWatchlist}>
           <i
             className={
@@ -46,11 +58,11 @@ export const SearchMovie = ({ movie }) => {
             }
           ></i>
           <p className={styles.searchMoviesListItemWatchlistText}>
-            Add to watchlist
+            <Link to={!user && '/login'}>Add to watchlist</Link>
           </p>
         </div>
         <div className={styles.searchMoviesListItemWatchlistIcon}>
-          <StarRating active={false} />
+          <StarRating active={false} id={movie._id} />
         </div>
       </div>
     </div>

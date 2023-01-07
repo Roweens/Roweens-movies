@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { getAllMovies } from '../../features/movie-slice';
 import { Loading } from '../Loading';
 import { SearchMovie } from '../SearchMovie/SearchMovie';
@@ -12,10 +13,53 @@ export const SearchMovies = () => {
   const [yearValue, setYearValue] = useState('Any year');
   const [movies, setMovies] = useState(null);
   const dispatch = useDispatch();
+  const { search } = useLocation();
 
   useEffect(() => {
-    dispatch(getAllMovies()).then((res) => setMovies(res.payload.data));
-  }, [dispatch]);
+    const queries = search.split('/');
+    dispatch(getAllMovies(queries))
+      .unwrap()
+      .then((res) => {
+        const sortedMovies = res.data.sort(
+          (first, second) =>
+            second.ratings.reduce((prev, next) => prev + next, 0) /
+              second.ratings.length -
+            first.ratings.reduce((prev, next) => prev + next, 0) /
+              first.ratings.length
+        );
+
+        setMovies(sortedMovies);
+      });
+  }, [dispatch, search]);
+
+  const handleSort = (e) => {
+    setSortType(e.target.value);
+    if (e.target.value === 'rating') {
+      const sortedRatingMovies = movies.sort(
+        (first, second) =>
+          second.ratings.reduce((prev, next) => prev + next, 0) /
+            second.ratings.length -
+          first.ratings.reduce((prev, next) => prev + next, 0) /
+            first.ratings.length
+      );
+      setMovies(sortedRatingMovies);
+    } else if (e.target.value === 'popularity') {
+      const sortedPopularityMovies = movies.sort(
+        (first, second) => second.ratings.length - first.ratings.length
+      );
+      setMovies(sortedPopularityMovies);
+    } else if (e.target.value === 'name') {
+      const sortedNameMovies = movies.sort((first, second) =>
+        first.title.localeCompare(second.title)
+      );
+      setMovies(sortedNameMovies);
+    } else if (e.target.value === 'date') {
+      const sortedDateMovies = movies.sort(
+        (first, second) => parseInt(second.year) - parseInt(first.year)
+      );
+      setMovies(sortedDateMovies);
+    }
+  };
 
   const handleYearFilter = (value) => {
     setYearValue(value);
@@ -90,80 +134,55 @@ export const SearchMovies = () => {
         <h2 className={styles.searchMoviesListTitle}>All Movies</h2>
         <div className={styles.searchMoviesCatsWrapper}>
           <div className={styles.searchMoviesCats}>
-            <div className={styles.searchMoviesCat}>
-              <h5 className={styles.searchMoviesCatTitle}>Movies</h5>
-              <p className={styles.searchMoviesCatTotal}>164</p>
-            </div>
-            <div className={styles.searchMoviesCat}>
-              <h5 className={styles.searchMoviesCatTitle}>Anime</h5>
-              <p className={styles.searchMoviesCatTotal}>164</p>
-            </div>
-            <div className={styles.searchMoviesCat}>
-              <h5 className={styles.searchMoviesCatTitle}>Series</h5>
-              <p className={styles.searchMoviesCatTotal}>164</p>
-            </div>
-          </div>
-          <div
-            className={styles.searchMoviesCatsSort}
-            onClick={() => setIsSorted(!isSorted)}
-          >
-            <span className={styles.searchMoviesCatsSelect}>{sortType}</span>
-            <i
-              className={
-                styles.searchMoviesCatsSelectIcon + ' fa-solid fa-caret-down'
-              }
-            />
-            {isSorted && (
-              <div className={styles.searchMoviesCatsDropdown}>
-                <label>
-                  <input type="radio" name="rating" value="rating" />
-                  <div onClick={() => setSortType('rating')}>
-                    <span className={styles.searchMoviesCatsDropdownOption}>
-                      By rating
-                    </span>
-                    {sortType === 'rating' && (
-                      <i className={styles.checked + ' fa-solid fa-check'}></i>
-                    )}
-                  </div>
-                </label>
-
-                <label>
-                  <input type="radio" name="name" value="name" />
-                  <div onClick={() => setSortType('name')}>
-                    <span className={styles.searchMoviesCatsDropdownOption}>
-                      By name
-                    </span>
-                    {sortType === 'name' && (
-                      <i className={styles.checked + ' fa-solid fa-check'}></i>
-                    )}
-                  </div>
-                </label>
-
-                <label>
-                  <input type="radio" name="date" value="date" />
-                  <div onClick={() => setSortType('date')}>
-                    <span className={styles.searchMoviesCatsDropdownOption}>
-                      By date
-                    </span>
-                    {sortType === 'date' && (
-                      <i className={styles.checked + ' fa-solid fa-check'}></i>
-                    )}
-                  </div>
-                </label>
-
-                <label>
-                  <input type="radio" name="popularity" value="popularity" />
-                  <div onClick={() => setSortType('popularity')}>
-                    <span className={styles.searchMoviesCatsDropdownOption}>
-                      By popularity
-                    </span>
-                    {sortType === 'popularity' && (
-                      <i className={styles.checked + ' fa-solid fa-check'}></i>
-                    )}
-                  </div>
-                </label>
+            <Link to={'/search'}>
+              <div className={styles.searchMoviesCat}>
+                <h5 className={styles.searchMoviesCatTitle}>All</h5>
+                {/* <p className={styles.searchMoviesCatTotal}>
+                  {movies &&
+                    movies.filter((movie) => movie.type === 'series').length}
+                </p> */}
               </div>
-            )}
+            </Link>
+            <Link to={'/search/?type=movie'}>
+              <div className={styles.searchMoviesCat}>
+                <h5 className={styles.searchMoviesCatTitle}>Movies</h5>
+                {/* <p className={styles.searchMoviesCatTotal}>
+                  {movies &&
+                    movies.filter((movie) => movie.type === 'movie').length}
+                </p> */}
+              </div>
+            </Link>
+            <Link to={'/search/?type=anime'}>
+              <div className={styles.searchMoviesCat}>
+                <h5 className={styles.searchMoviesCatTitle}>Anime</h5>
+                {/* <p className={styles.searchMoviesCatTotal}>
+                  {movies &&
+                    movies.filter((movie) => movie.type === 'anime').length}
+                </p> */}
+              </div>
+            </Link>
+            <Link to={'/search/?type=series'}>
+              <div className={styles.searchMoviesCat}>
+                <h5 className={styles.searchMoviesCatTitle}>Series</h5>
+                {/* <p className={styles.searchMoviesCatTotal}>
+                  {movies &&
+                    movies.filter((movie) => movie.type === 'series').length}
+                </p> */}
+              </div>
+            </Link>
+          </div>
+          <div className={styles.searchMoviesCatsSort}>
+            <select
+              name="sort"
+              id="sort"
+              value={sortType}
+              onChange={handleSort}
+            >
+              <option value="rating">By rating</option>
+              <option value="date">By date</option>
+              <option value="popularity">By popularity</option>
+              <option value="name">By name</option>
+            </select>
           </div>
         </div>
         {!movies ? (

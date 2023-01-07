@@ -1,10 +1,26 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { selectUser } from '../../features/auth-slice';
+import { rateMovie } from '../../features/movie-slice';
 import styles from './StarRating.module.scss';
 
-export const StarRating = ({ active }) => {
+export const StarRating = ({ active, id }) => {
   const [isRated, setIsRated] = useState(active);
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
+
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const navigate = useNavigate();
+
+  const handleRating = (ratingValue) => {
+    if (!user) navigate('/login');
+    setIsRated(false);
+    setRating(ratingValue);
+    dispatch(rateMovie({ id, ratingValue }));
+  };
+
   return (
     <div className={styles.starRating}>
       {!isRated ? (
@@ -29,10 +45,7 @@ export const StarRating = ({ active }) => {
                   name="rating"
                   className={styles.starRatingRadio}
                   value={ratingValue}
-                  onClick={() => {
-                    setIsRated(false);
-                    setRating(ratingValue);
-                  }}
+                  onClick={() => handleRating(ratingValue)}
                 />
                 <i
                   className={
