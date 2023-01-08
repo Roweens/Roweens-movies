@@ -42,6 +42,7 @@ export const AddMovie = () => {
       limits,
       actors: actorsArr,
       director,
+      country,
     };
 
     const data1 = new FormData();

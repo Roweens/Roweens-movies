@@ -1,5 +1,4 @@
 import styles from './SearchMovie.module.scss';
-
 import { StarRating } from '../StarRating';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';

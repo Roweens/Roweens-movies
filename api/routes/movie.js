@@ -33,14 +33,10 @@ router.post('/add', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const type = req.query.type;
-  const genre = req.query.genre;
-  const year = req.query.year;
-  const country = req.query.country;
-
-  console.log(req.query);
 
   try {
     let movies;
+
     if (type) {
       movies = await Movie.find({ type: type });
     } else {
