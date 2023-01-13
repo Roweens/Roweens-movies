@@ -3,18 +3,20 @@
   position: relative;
   color: white;
   font-family: 'Oswald', sans-serif;
+  z-index: 1;
   .singleMovieImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: brightness(0.5);
   }
 
   .singleMovieWrapper {
     position: absolute;
     top: 0;
-    z-index: 999;
+    z-index: 998;
     margin-left: 70px;
-    margin-top: 150px;
+    padding-top: 150px;
     height: 100%;
     .singleMovieTitle {
       font-size: 110px;

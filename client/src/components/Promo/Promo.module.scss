@@ -1,75 +1,95 @@
 .promo {
   font-family: 'Oswald', sans-serif;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
   height: 600px;
-  background-image: linear-gradient(
-      to bottom,
-      rgba(25, 24, 23, 0),
-      rgba(25, 24, 23, 1)
-    ),
-    url('../../assets/godzilla.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   width: 100%;
   color: white;
   margin: 0 auto;
   padding-left: 40px;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  .promoTitle {
-    font-size: 120px;
-    margin-block-start: 0;
+  position: relative;
+  z-index: 999;
+  .promoImgContainer {
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(25, 24, 23, 0),
+        rgba(25, 24, 23, 1)
+      );
+    }
+    z-index: -1;
+    .promoImg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      border-top-right-radius: 5px;
+      border-top-left-radius: 5px;
+    }
   }
-  .promoCategories {
-    list-style: none;
+  .promoInfo {
     display: flex;
-    padding-inline-start: 0;
-    .promoCategory {
-      background-color: #292a2b;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 5px 10px;
-      border-radius: 30px;
-      margin: 5px 0 0 10px;
-      cursor: pointer;
-      font-size: 18px;
-      font-weight: 300;
-      &:hover {
-        filter: brightness(0.8);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    .promoTitle {
+      font-size: 120px;
+      margin-block-start: 0;
+    }
+    .promoCategories {
+      list-style: none;
+      display: flex;
+      padding-inline-start: 0;
+      .promoCategory {
+        background-color: #292a2b;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 5px 10px;
+        border-radius: 30px;
+        margin: 20px 0 20px 10px;
+        font-size: 18px;
+        font-weight: 300;
+        &:hover {
+          filter: brightness(0.8);
+        }
+      }
+      .promoCategory:first-child {
+        margin-left: 5px;
       }
     }
-    .promoCategory:first-child {
-      margin-left: 5px;
-    }
-  }
-  .promoWatch {
-    cursor: pointer;
-    background-color: red;
-    display: flex;
-    align-items: baseline;
-    border-radius: 40px;
-    margin: 20px 0 0 5px;
-    transition: transform 0.3s ease, filter 0.2s ease;
-    &:hover {
-      transform: scale(1.05);
-      filter: brightness(0.9);
-    }
-    .promoButton {
-      border: none;
-      outline: none;
-      background-color: unset;
-      color: white;
-      padding: 15px 8px 15px 40px;
-      font-family: 'Oswald', sans-serif;
-      font-size: 22px;
+    .promoWatch {
       cursor: pointer;
-    }
-    .promoInfoIcon {
-      padding-right: 40px;
-      font-size: 22px;
+      background-color: red;
+      display: flex;
+      align-items: baseline;
+      border-radius: 40px;
+      margin: 0 0 0 5px;
+      transition: transform 0.3s ease, filter 0.2s ease;
+      &:hover {
+        transform: scale(1.05);
+        filter: brightness(0.9);
+      }
+      .promoButton {  
+        border: none;
+        outline: none;
+        background-color: unset;
+        color: white;
+        padding: 15px 8px 15px 40px;
+        font-family: 'Oswald', sans-serif;
+        font-size: 22px;
+        cursor: pointer;
+      }
+      .promoInfoIcon {
+        padding-right: 40px;
+        font-size: 22px;
+      }
     }
   }
 }

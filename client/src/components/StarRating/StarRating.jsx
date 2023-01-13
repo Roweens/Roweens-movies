@@ -5,7 +5,7 @@ import { selectUser } from '../../features/auth-slice';
 import { rateMovie } from '../../features/movie-slice';
 import styles from './StarRating.module.scss';
 
-export const StarRating = ({ active, id }) => {
+export const StarRating = ({ active, id, ratings }) => {
   const [isRated, setIsRated] = useState(active);
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
@@ -15,23 +15,22 @@ export const StarRating = ({ active, id }) => {
   const navigate = useNavigate();
 
   const handleRating = (ratingValue) => {
-    if (!user) navigate('/login');
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     setIsRated(false);
     setRating(ratingValue);
-    dispatch(rateMovie({ id, ratingValue }));
+    dispatch(rateMovie({ id, ratingValue, userId: user._id }));
   };
 
   return (
     <div className={styles.starRating}>
       {!isRated ? (
-        rating ? (
-          <span>{rating}</span>
-        ) : (
-          <i
-            className={styles.starRatingDefaultStar + ' fa-regular fa-star'}
-            onClick={() => setIsRated(!isRated)}
-          />
-        )
+        <i
+          className={styles.starRatingDefaultStar + ' fa-regular fa-star'}
+          onClick={() => setIsRated(!isRated)}
+        />
       ) : (
         <>
           {' '}

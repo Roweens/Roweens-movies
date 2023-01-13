@@ -1,0 +1,23 @@
+.watchlistBtn {
+  color: rgb(0, 0, 0, 0.9);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-radius: 100px;
+  margin: 0 25px;
+  background-color: rgb(229, 224, 224, 0.9);
+  width: fit-content;
+  padding: 0 18px 0 11px;
+  transition: all 0.5s ease;
+  padding: 10px 15px;
+  &:hover {
+    transform: scale(1.05);
+    background-color: var(--search-button-color);
+    color: rgb(0, 0, 0, 1);
+  }
+
+  cursor: pointer;
+  .watchlistIcon {
+    font-size: 20px;
+  }
+}

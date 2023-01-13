@@ -33,7 +33,7 @@ export const handleUserUpdate = createAsyncThunk(
   '@@auth/update',
   ({ id, token, ...others }, { extra: { axios } }) => {
     const res = axios.put(
-      `/users/${id}`,
+      `/users/update/${id}`,
       {
         ...others,
       },
@@ -52,6 +52,42 @@ export const handleSingleFileUpload = createAsyncThunk(
   '@@auth/uploadSingle',
   (data, { extra: { axios } }) => {
     axios.post('/upload/single', data);
+  }
+);
+
+export const handleWatchlistAdd = createAsyncThunk(
+  '@@auth/addToWatchlist',
+  async ({ movieId, userId }, { extra: { axios } }) => {
+    try {
+      const res = await axios.put('/users/watchlist/add/' + userId, {
+        id: movieId,
+      });
+      return res.data;
+    } catch (error) {}
+  }
+);
+
+export const handleWatchlistDelete = createAsyncThunk(
+  '@@auth/removeFromWatchlist',
+  async ({ movieId, userId }, { extra: { axios } }) => {
+    try {
+      console.log(movieId);
+      const res = await axios.delete('/users/watchlist/delete/' + userId, {
+        data: {
+          id: movieId,
+        },
+      });
+      return res.data;
+    } catch (error) {}
+  }
+);
+
+export const handleWatchingAdd = createAsyncThunk(
+  '@@auth/addToWatching',
+  ({ movieId, userId }, { extra: { axios } }) => {
+    axios.put('/users/watching/add/' + userId, {
+      id: movieId,
+    });
   }
 );
 
@@ -97,6 +133,14 @@ const authSlice = createSlice({
       .addCase(handleUserUpdate.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.payload || action.meta.error;
+      })
+      .addCase(handleWatchlistAdd.fulfilled, (state, action) => {
+        state.status = 'received';
+        state.user.watchlist = action.payload;
+      })
+      .addCase(handleWatchlistDelete.fulfilled, (state, action) => {
+        state.status = 'received';
+        state.user.watchlist = action.payload;
       });
   },
 });

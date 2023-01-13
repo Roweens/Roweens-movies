@@ -1,218 +1,152 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { getAllMovies } from '../../features/movie-slice';
+import { useSortedAndFilteredMovies } from '../../hooks/useMovies';
+import { getPagesCount } from '../../utils/pages';
+import { values } from '../../utils/values';
 import { Loading } from '../Loading';
 import { SearchMovie } from '../SearchMovie/SearchMovie';
+import { CustomSelect } from '../UI/CustomSelect';
+import { RemoveFilter } from '../UI/RemoveFilter';
 import styles from './SearchMovies.module.scss';
 
 export const SearchMovies = () => {
-  const [sortType, setSortType] = useState('rating');
-
-  const [yearValues, setYearValues] = useState('');
-  const [genreValues, setGenreValues] = useState('');
-  const [countryValues, setCountryValues] = useState('');
-
-  const [movies, setMovies] = useState(null);
-  const [filteredMovies, setFilteredMovies] = useState(null);
+  const [sortType, setSortType] = useState('date');
   const [filters, setFilters] = useState({});
+  const [yearValues, setYearValues] = useState(null);
+  const [countryValues, setCountryValues] = useState(null);
+  const [genreValues, setGenreValues] = useState(null);
+  const [movies, setMovies] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const sortedAndFilteredMovies = useSortedAndFilteredMovies(
+    movies,
+    sortType,
+    filters
+  );
   const dispatch = useDispatch();
   const { search } = useLocation();
+  const lastElement = useRef();
+  const observer = useRef();
+
+  const sortOptions = [
+    { value: 'rating', name: 'By rating' },
+    { value: 'date', name: 'By date' },
+    { value: 'popularity', name: 'By popularity' },
+    { value: 'name', name: 'By name' },
+  ];
 
   useEffect(() => {
-    dispatch(getAllMovies(search))
+    if (observer.current) observer.current.disconnect();
+    var callback = function (entries, observer) {
+      if (entries[0].isIntersecting && page < totalPages) {
+        console.log('pisi');
+        setPage(page + 1);
+      }
+    };
+
+    observer.current = new IntersectionObserver(callback);
+    observer.current.observe(lastElement.current);
+  }, [movies]);
+
+  useEffect(() => {
+    dispatch(getAllMovies({ search, page }))
       .unwrap()
       .then((res) => {
-        const sortedMovies = res.data.sort(
-          (first, second) =>
-            second.ratings.reduce((prev, next) => prev + next, 0) /
-              second.ratings.length -
-            first.ratings.reduce((prev, next) => prev + next, 0) /
-              first.ratings.length
-        );
-        setMovies(sortedMovies);
-        setFilteredMovies(sortedMovies);
-
-        const yearArr = [];
-        const genresArr = [];
-        const countriesArr = [];
-
-        res.data.forEach((movie) => {
-          if (!yearArr.includes(movie.year)) yearArr.push(movie.year);
-          if (!countriesArr.includes(movie.country))
-            countriesArr.push(movie.country);
-          movie.genres.forEach((genre) => {
-            if (!genresArr.includes(genre)) genresArr.push(genre);
-          });
-        });
-
-        setYearValues(yearArr);
-        setCountryValues(countriesArr);
-        setGenreValues(genresArr);
+        setMovies([...movies, ...res.data]);
+        setTotalPages(getPagesCount(res.headers['total-count']));
       });
-  }, [dispatch, search]);
+  }, [dispatch, search, page]);
 
-  useEffect(() => {
-    if (filteredMovies) {
-      const newArr = movies.filter(function (movie) {
-        for (let filter in filters) {
-          if (filter === 'genres') {
-            if (
-              movie[filter] === undefined ||
-              !movie[filter].includes(filters[filter])
-            ) {
-              return false;
-            }
-          } else if (
-            movie[filter] === undefined ||
-            movie[filter] !== filters[filter]
-          )
-            return false;
-        }
-        return true;
-      });
+  useMemo(() => {
+    setYearValues(values(movies, 'year'));
+    setCountryValues(values(movies, 'country'));
+    setGenreValues(values(movies, 'genres'));
+  }, [movies]);
 
-      setFilteredMovies(newArr);
+  const handleRemoveFilter = (value) => {
+    if (value === 'year') {
+      const { year, ...others } = filters;
+      setFilters(others);
+    } else if (value === 'genres') {
+      const { genres, ...others } = filters;
+      setFilters(others);
+    } else {
+      const { country, ...others } = filters;
+      setFilters(others);
     }
-  }, [filters]);
+  };
 
-  const handleSort = (e) => {
+  const handleAddFilter = (e) => {
+    setFilters({
+      ...filters,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSetSort = (e) => {
     setSortType(e.target.value);
-    if (e.target.value === 'rating') {
-      const sortedRatingMovies = movies.sort(
-        (first, second) =>
-          second.ratings.reduce((prev, next) => prev + next, 0) /
-            second.ratings.length -
-          first.ratings.reduce((prev, next) => prev + next, 0) /
-            first.ratings.length
-      );
-      setMovies(sortedRatingMovies);
-    } else if (e.target.value === 'popularity') {
-      const sortedPopularityMovies = movies.sort(
-        (first, second) => second.ratings.length - first.ratings.length
-      );
-      setMovies(sortedPopularityMovies);
-    } else if (e.target.value === 'name') {
-      const sortedNameMovies = movies.sort((first, second) =>
-        first.title.localeCompare(second.title)
-      );
-      setMovies(sortedNameMovies);
-    } else if (e.target.value === 'date') {
-      const sortedDateMovies = movies.sort(
-        (first, second) => parseInt(second.year) - parseInt(first.year)
-      );
-      setMovies(sortedDateMovies);
-    }
   };
-
-  const handleFilter = () => {
-    // if (!yearValue && filter === 'year') {
-    //   setFilteredMovies(
-    //     filteredMovies.filter((movie) => movie.year === e.target.value)
-    //   );
-    // } else if (yearValue && filter === 'year') {
-    //   setFilteredMovies(
-    //     movies.filter((movie) => movie.year === e.target.value)
-    //   );
-    // } else if (!genreValue && filter === 'genre') {
-    //   console.log(e.target.value);
-    //   setFilteredMovies(
-    //     filteredMovies.filter((movie) => movie.genres.includes(e.target.value))
-    //   );
-    // } else if (genreValue && filter === 'genre') {
-    //   console.log(e.target.value);
-    //   setFilteredMovies(
-    //     movies.filter((movie) => movie.genres.includes(e.target.value))
-    //   );
-    // }
-  };
-
-  // const handleYearFilter = (e) => {
-  //   setYearValue(e.target.value);
-
-  //   const filteredByYear = filters.map((filter) =>
-  //     movies.filter((movie) => movie[filter.filter] === filter.value)
-  //   );
-  //   console.log(filteredByYear);
-
-  //   setFilters([...filters, { filter: 'year', value: e.target.value }]);
-  //   setFilteredMovies(filteredByYear);
-  // };
 
   return (
     <>
       {' '}
-      {filteredMovies ? (
+      {movies ? (
         <div className={styles.searchMovies}>
           <div className={styles.searchMoviesFiltersWrapper}>
             <h2 className={styles.searchMoviesFiltersTitle}>Filters</h2>
+            <div className={styles.searchMoviesFiltersRemove}>
+              <RemoveFilter
+                filters={filters}
+                value={'year'}
+                onClick={handleRemoveFilter}
+              />
+
+              <RemoveFilter
+                filters={filters}
+                value={'country'}
+                onClick={handleRemoveFilter}
+              />
+
+              <RemoveFilter
+                filters={filters}
+                value={'genres'}
+                onClick={handleRemoveFilter}
+              />
+            </div>
             <div className={styles.searchMoviesFilters}>
               <p className={styles.searchMoviesFilterTitle}>Year</p>
-              <select
-                name="year"
-                id="year"
-                onChange={(e) => {
-                  setFilters({
-                    ...filters,
-                    year: e.target.value,
-                  });
-                }}
-              >
-                <option value="" disabled selected hidden>
-                  Any
-                </option>
-                {yearValues.map((year, i) => {
-                  return (
-                    <option value={year} key={i}>
-                      {year}
-                    </option>
-                  );
-                })}
-              </select>
+              {yearValues && (
+                <CustomSelect
+                  options={yearValues}
+                  defaultValue="Any"
+                  value={filters.year ? filters.year : 'Any'}
+                  onChange={handleAddFilter}
+                  name="year"
+                />
+              )}
               <p className={styles.searchMoviesFilterTitle}>Country</p>
-              <select
-                name="country"
-                id="country"
-                onChange={(e) => {
-                  setFilters({
-                    ...filters,
-                    country: e.target.value,
-                  });
-                }}
-              >
-                <option value="" disabled selected hidden>
-                  Any
-                </option>
-                {countryValues.map((country, i) => {
-                  return (
-                    <option value={country} key={i}>
-                      {country}
-                    </option>
-                  );
-                })}
-              </select>
+              {countryValues && (
+                <CustomSelect
+                  options={countryValues}
+                  defaultValue="Any"
+                  value={filters.country ? filters.country : 'Any'}
+                  onChange={handleAddFilter}
+                  name="country"
+                />
+              )}
               <p className={styles.searchMoviesFilterTitle}>Genre</p>
-              <select
-                name="genre"
-                id="genre"
-                onChange={(e) => {
-                  setFilters({
-                    ...filters,
-                    genres: e.target.value,
-                  });
-                }}
-              >
-                <option value="" disabled selected hidden>
-                  Any
-                </option>
-                {genreValues.map((genre, i) => {
-                  return (
-                    <option value={genre} key={i}>
-                      {genre}
-                    </option>
-                  );
-                })}
-              </select>
+              {genreValues && (
+                <CustomSelect
+                  options={genreValues}
+                  defaultValue="Any"
+                  value={filters.genres ? filters.genres : 'Any'}
+                  onChange={handleAddFilter}
+                  name="genres"
+                />
+              )}
             </div>
           </div>
           <div className={styles.searchMoviesListWrapper}>
@@ -222,60 +156,41 @@ export const SearchMovies = () => {
                 <Link to={'/search'}>
                   <div className={styles.searchMoviesCat}>
                     <h5 className={styles.searchMoviesCatTitle}>All</h5>
-                    {/* <p className={styles.searchMoviesCatTotal}>
-                  {movies &&
-                    movies.filter((movie) => movie.type === 'series').length}
-                </p> */}
                   </div>
                 </Link>
                 <Link to={`/search/?type=movie`}>
                   <div className={styles.searchMoviesCat}>
                     <h5 className={styles.searchMoviesCatTitle}>Movies</h5>
-                    {/* <p className={styles.searchMoviesCatTotal}>
-                  {movies &&
-                    movies.filter((movie) => movie.type === 'movie').length}
-                </p> */}
                   </div>
                 </Link>
                 <Link to={`/search/?type=anime`}>
                   <div className={styles.searchMoviesCat}>
                     <h5 className={styles.searchMoviesCatTitle}>Anime</h5>
-                    {/* <p className={styles.searchMoviesCatTotal}>
-                  {movies &&
-                    movies.filter((movie) => movie.type === 'anime').length}
-                </p> */}
                   </div>
                 </Link>
                 <Link to={`/search/?type=series`}>
                   <div className={styles.searchMoviesCat}>
                     <h5 className={styles.searchMoviesCatTitle}>Series</h5>
-                    {/* <p className={styles.searchMoviesCatTotal}>
-                  {movies &&
-                    movies.filter((movie) => movie.type === 'series').length}
-                </p> */}
                   </div>
                 </Link>
               </div>
               <div className={styles.searchMoviesCatsSort}>
-                <select
-                  name="sort"
-                  id="sort"
+                <CustomSelect
+                  options={sortOptions}
+                  defaultValue="date"
                   value={sortType}
-                  onChange={handleSort}
-                >
-                  <option value="rating">By rating</option>
-                  <option value="date">By date</option>
-                  <option value="popularity">By popularity</option>
-                  <option value="name">By name</option>
-                </select>
+                  onChange={handleSetSort}
+                />
               </div>
             </div>
 
             <div className={styles.searchMoviesList}>
-              {filteredMovies.map((movie) => {
+              {sortedAndFilteredMovies.map((movie, i, array) => {
                 return <SearchMovie movie={movie} key={movie._id} />;
               })}
             </div>
+
+            <div ref={lastElement} className={styles.dynamic}></div>
           </div>
         </div>
       ) : (

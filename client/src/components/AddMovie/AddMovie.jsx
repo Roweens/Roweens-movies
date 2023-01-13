@@ -1,3 +1,4 @@
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { handleSingleFileUpload } from '../../features/auth-slice';
@@ -5,6 +6,7 @@ import {
   handleMultipleFileUpload,
   uploadMovie,
 } from '../../features/movie-slice';
+import storage from '../../firebase';
 import styles from './AddMovie.module.scss';
 
 export const AddMovie = () => {
@@ -23,57 +25,66 @@ export const AddMovie = () => {
   const [actors, setActors] = useState('');
   const [director, setDirector] = useState('');
 
+  const [uploaded, setUploaded] = useState(0);
+
+  const [movie, setMovie] = useState({});
+
   const dispatch = useDispatch();
 
-  const handleUpdate = (e) => {
+  const upload = (items) => {
+    items.forEach((item) => {
+      const filename = new Date().getTime() + item.label + item.file.name;
+      const storageRef = ref(storage, `/items/${filename}`);
+      const uploadTask = uploadBytesResumable(storageRef, item.file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(progress + '%');
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setMovie((prev) => {
+              return { ...prev, [item.label]: downloadURL };
+            });
+            setUploaded((prev) => prev + 1);
+          });
+        }
+      );
+    });
+  };
+
+  const handleChange = (e) => {
+    if (e.target.name === 'genres' || e.target.name === 'actors') {
+      setMovie({ ...movie, [e.target.name]: e.target.value.split(',') });
+    } else setMovie({ ...movie, [e.target.name]: e.target.value });
+  };
+
+  const handleUpload = (e) => {
+    e.preventDefault();
+    upload([
+      { file: imgSmall, label: 'imgSmall' },
+      { file: imgBig, label: 'imgBig' },
+      { file: trailer, label: 'trailer' },
+    ]);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const genresArr = genres.split(',');
-    const actorsArr = actors.split(',');
-
-    const newMovie = {
-      title,
-      quote,
-      desc,
-      duration,
-      genres: genresArr,
-      type,
-      year,
-      limits,
-      actors: actorsArr,
-      director,
-      country,
-    };
-
-    const data1 = new FormData();
-    const filename1 = Date.now() + imgSmall.name;
-    data1.append('name', filename1);
-    data1.append('file', imgSmall);
-    newMovie.imgSmall = filename1;
-    dispatch(handleSingleFileUpload(data1));
-
-    const data2 = new FormData();
-    const filename2 = Date.now() + imgBig.name;
-    data2.append('name', filename2);
-    data2.append('file', imgBig);
-    newMovie.imgBig = filename2;
-    dispatch(handleSingleFileUpload(data2));
-
-    const data3 = new FormData();
-    const filename3 = Date.now() + trailer.name;
-    data3.append('name', filename3);
-    data3.append('file', trailer);
-    newMovie.trailer = filename3;
-    dispatch(handleSingleFileUpload(data3));
-
-    dispatch(uploadMovie(newMovie));
+    dispatch(uploadMovie(movie));
   };
 
   return (
     <div className={styles.addMovie}>
       <h2 className={styles.addMovieTitle}>Add movie</h2>
 
-      <form className={styles.addMovieForm} onSubmit={handleUpdate}>
+      <form className={styles.addMovieForm}>
         <div className={styles.addMovieMain}>
           <div className={styles.addMovieMainFiles}>
             <div className={styles.addMovieFileInputWrapper}>
@@ -121,9 +132,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="title"
+                name="title"
                 className={styles.addMovieInput}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -134,9 +145,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="quote"
+                name="quote"
                 className={styles.addMovieInput}
-                value={quote}
-                onChange={(e) => setQuote(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className={styles.addMovieInputWrapper}>
@@ -146,9 +157,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="country"
+                name="country"
                 className={styles.addMovieInput}
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -159,9 +170,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="desc"
+                name="desc"
                 className={styles.addMovieInput}
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -172,9 +183,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="year"
+                name="year"
                 className={styles.addMovieInput}
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -185,9 +196,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="limits"
+                name="limits"
                 className={styles.addMovieInput}
-                value={limits}
-                onChange={(e) => setLimits(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className={styles.addMovieInputWrapper}>
@@ -197,9 +208,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="director"
+                name="director"
                 className={styles.addMovieInput}
-                value={director}
-                onChange={(e) => setDirector(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className={styles.addMovieInputWrapper}>
@@ -209,9 +220,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="actors"
+                name="actors"
                 className={styles.addMovieInput}
-                value={actors}
-                onChange={(e) => setActors(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -222,9 +233,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="genres"
+                name="genres"
                 className={styles.addMovieInput}
-                value={genres}
-                onChange={(e) => setGenres(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -235,9 +246,9 @@ export const AddMovie = () => {
               <input
                 type="text"
                 id="duration"
+                name="duration"
                 className={styles.addMovieInput}
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -248,8 +259,7 @@ export const AddMovie = () => {
                 name="type"
                 id="type1"
                 value="movie"
-                onChange={(e) => setType(e.target.value)}
-                checked={type === 'movie'}
+                onChange={handleChange}
               />
               <label htmlFor="type1">Movie</label>
             </div>
@@ -259,8 +269,7 @@ export const AddMovie = () => {
                 name="type"
                 id="type2"
                 value="series"
-                onChange={(e) => setType(e.target.value)}
-                checked={type === 'series'}
+                onChange={handleChange}
               />
               <label htmlFor="type2">Series</label>
             </div>
@@ -270,17 +279,29 @@ export const AddMovie = () => {
                 name="type"
                 id="type3"
                 value="anime"
-                onChange={(e) => setType(e.target.value)}
-                checked={type === 'anime'}
+                onChange={handleChange}
               />
               <label htmlFor="type3">Anime</label>
             </div>
           </div>
         </div>
-
-        <button type="submit" className={styles.addMovieFormButton}>
-          Apply changes
-        </button>
+        {uploaded === 3 ? (
+          <button
+            type="submit"
+            className={styles.addMovieFormButton}
+            onClick={handleSubmit}
+          >
+            Add movie
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className={styles.addMovieFormButton}
+            onClick={handleUpload}
+          >
+            Upload
+          </button>
+        )}
       </form>
     </div>
   );

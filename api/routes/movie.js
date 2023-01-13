@@ -33,17 +33,39 @@ router.post('/add', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const type = req.query.type;
+  const page = req.query.page;
+
+  const options = {
+    page: page,
+    limit: 10,
+    collation: {
+      locale: 'en',
+    },
+  };
 
   try {
     let movies;
 
     if (type) {
-      movies = await Movie.find({ type: type });
+      movies = await Movie.paginate({ type: type }, options);
     } else {
-      movies = await Movie.find({});
+      movies = await Movie.paginate({}, options);
     }
 
-    res.status(201).json(movies);
+    const count = await Movie.countDocuments({});
+    res.set('total-count', count);
+    res.status(201).json(movies.docs);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+//Get random movie
+
+router.get('/random', async (req, res) => {
+  try {
+    const randomMovie = await Movie.aggregate([{ $sample: { size: 1 } }]);
+    res.status(200).json(randomMovie);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -51,9 +73,10 @@ router.get('/', async (req, res) => {
 
 //Get one movie
 
-router.get('/:id', async (req, res) => {
+router.get('/find/:id', async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id);
+
     res.status(200).json(movie);
   } catch (error) {
     res.status(500).json(error);
@@ -65,7 +88,24 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const updatedMovie = await Movie.findById(req.body.id);
-    updatedMovie.ratings = [...updatedMovie.ratings, req.body.rating];
+
+    const currentUserRating = updatedMovie.ratings.find(
+      (rating) => rating.username === req.body.userId
+    );
+    if (currentUserRating) {
+      const clearArr = updatedMovie.ratings.filter(
+        (rating) => rating !== currentUserRating
+      );
+      const newRating = { username: req.body.userId, rating: req.body.rating };
+      clearArr.push(newRating);
+      updatedMovie.ratings = clearArr;
+    } else {
+      updatedMovie.ratings = [
+        ...updatedMovie.ratings,
+        { username: req.body.userId, rating: req.body.rating },
+      ];
+    }
+
     await updatedMovie.save();
     res.status(200).json(updatedMovie);
   } catch (error) {

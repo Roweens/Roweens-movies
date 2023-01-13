@@ -12,6 +12,7 @@ import { selectUser } from './features/auth-slice';
 import { useSelector } from 'react-redux';
 import { NotificationContainer } from 'react-notifications';
 import { Adminpage } from './pages/Adminpage';
+import { Watchpage } from './pages/Watchpage';
 
 function App() {
   const user = useSelector(selectUser);
@@ -42,6 +43,7 @@ function App() {
         <Route path="/search" element={<Searchpage />} />
         <Route path="/movie/:id" element={<Moviepage />} />
         <Route path="/admin" element={<Adminpage />} />
+        <Route path="/watch" element={<Watchpage />} />
       </Routes>
 
       <Footer />

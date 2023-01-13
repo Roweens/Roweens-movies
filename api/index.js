@@ -4,14 +4,14 @@ const mongoose = require('mongoose');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/users');
 const movieRoute = require('./routes/movie');
-const multer = require('multer');
+// const multer = require('multer');
 const path = require('path');
 
 const app = express();
 dotenv.config();
 
 app.use(express.json());
-app.use('/images', express.static(path.join(__dirname, '/images')));
+// app.use('/images', express.static(path.join(__dirname, '/images')));
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -22,24 +22,24 @@ process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', reason.stack || reason);
 });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'images');
-  },
-  filename: (req, file, cb) => {
-    cb(null, req.body.name);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'images');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, req.body.name);
+//   },
+// });
 
-const upload = multer({ storage: storage });
-app.post('/api/upload/single', upload.single('file'), (req, res) => {
-  res.status(200).json('Single file has been uploaded');
-});
+// const upload = multer({ storage: storage });
+// app.post('/api/upload/single', upload.single('file'), (req, res) => {
+//   res.status(200).json('Single file has been uploaded');
+// });
 
-app.post('/api/upload/multiple', upload.array('files', 3), (req, res) => {
-  console.log(req.files);
-  res.status(200).json('Multiple files have been uploaded');
-});
+// app.post('/api/upload/multiple', upload.array('files', 3), (req, res) => {
+//   console.log(req.files);
+//   res.status(200).json('Multiple files have been uploaded');
+// });
 
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);

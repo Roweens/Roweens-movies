@@ -49,6 +49,38 @@ body[data-theme='dark'] {
   padding-top: 50px;
 }
 
+.watchpage {
+  height: calc(100vh - 351px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--homepage-color);
+}
+
+.video-container {
+  position: relative;
+  height: 100%;
+}
+
+.video {
+  height: 100%;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 2%;
+  padding: 20px;
+  background-color: white;
+  left: -2%;
+  color: black;
+  font-size: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 50;
+}
+
 a {
   color: unset;
   text-decoration: unset;

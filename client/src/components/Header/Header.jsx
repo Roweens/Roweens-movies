@@ -20,15 +20,15 @@ export const Header = () => {
       </div>
       <div className={styles.headerNavbar}>
         <ul className={styles.headerNavbarList}>
-          <Link to={'/search'}>
+          <Link to={'/search/?type=movie'}>
             {' '}
             <li className={styles.headerNavbarListItem}>Movies</li>
           </Link>
 
-          <Link to={'/search'}>
+          <Link to={'/search/?type=series'}>
             <li className={styles.headerNavbarListItem}>TV Series</li>
           </Link>
-          <Link to={'/search'}>
+          <Link to={'/search/?type=anime'}>
             <li className={styles.headerNavbarListItem}>Anime</li>
           </Link>
         </ul>

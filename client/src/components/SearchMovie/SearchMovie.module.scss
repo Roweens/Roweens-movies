@@ -76,8 +76,24 @@
           border-radius: 50%;
         }
       }
-      .searchMoviesListItemGenre {
-        color: var(--search-secondary-text-color);
+      .searchMoviesListItemGenres {
+        display: inline-block;
+
+        .searchMoviesListItemGenre {
+          color: var(--search-secondary-text-color);
+          &:after {
+            content: '';
+            height: 14px;
+            vertical-align: middle;
+            width: 0.5px;
+            background-color: aliceblue;
+            display: inline-block;
+            margin: 0 10px;
+          }
+          &:last-child::after {
+            content: none;
+          }
+        }
       }
       .searchMoviesListItemCreator {
         color: var(--search-secondary-text-color);
@@ -90,54 +106,44 @@
     }
   }
   .searchMoviesListItemAdd {
-    display: flex;
-    align-items: center;
-    height: fit-content;
-    color: white;
-    .searchMoviesListItemRating {
-      background-color: darkgreen;
-      padding: 10px 10px;
-      border-radius: 100px;
-      text-align: center;
-    }
-    .searchMoviesListItemWatchlist {
-      color: rgb(0, 0, 0, 0.9);
+    .searchMoviesListItemAddButtons {
       display: flex;
       align-items: center;
-      border-radius: 100px;
-      margin: 0 25px;
-      background-color: rgb(229, 224, 224, 0.9);
-      width: fit-content;
-      padding: 0 18px 0 11px;
-      transition: all 0.5s ease;
-      &:hover {
-        transform: scale(1.05);
-        background-color: var(--search-button-color);
-        color: rgb(0, 0, 0, 1);
+      height: fit-content;
+      color: white;
+      .searchMoviesListItemRating {
+        padding: 10px 10px;
+        border-radius: 100px;
+        text-align: center;
       }
 
-      cursor: pointer;
       .searchMoviesListItemWatchlistIcon {
+        color: black;
+
+        padding: 10px 10px;
         font-size: 20px;
-      }
-      .searchMoviesListItemWatchlistText {
+        border-radius: 100px;
+        transition: all 0.5s ease;
+        &:last-child {
+          background-color: rgb(229, 224, 224, 0.9);
+
+          &:hover {
+            transform: scale(1.05);
+            background-color: var(--search-button-color);
+            color: rgb(0, 0, 0, 1);
+          }
+        }
       }
     }
-    .searchMoviesListItemWatchlistIcon {
-      color: black;
-
-      padding: 10px 10px;
-      font-size: 20px;
-      border-radius: 100px;
-      transition: all 0.5s ease;
-      &:last-child {
-        background-color: rgb(229, 224, 224, 0.9);
-
-        &:hover {
-          transform: scale(1.05);
-          background-color: var(--search-button-color);
-          color: rgb(0, 0, 0, 1);
-        }
+    .searchMoviesListItemUserRating {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 30px;
+      font-size: 16px;
+      span {
+        font-size: 18px;
+        font-weight: 700;
+        color: #337fc3;
       }
     }
   }

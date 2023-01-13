@@ -1,0 +1,19 @@
+.searchMoviesFiltersRemoveBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--search-button-color);
+  color: black;
+  border-radius: 15px;
+  max-width: fit-content;
+  white-space: nowrap;
+
+  .searchMoviesIcon {
+    font-size: 18px;
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}

@@ -30,6 +30,14 @@ const UserSchema = new mongoose.Schema(
     birth: {
       type: Date,
     },
+    watchlist: {
+      type: Array,
+      default: [],
+    },
+    watching: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true }
 );

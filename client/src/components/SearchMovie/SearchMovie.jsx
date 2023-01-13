@@ -1,20 +1,39 @@
 import styles from './SearchMovie.module.scss';
 import { StarRating } from '../StarRating';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../features/auth-slice';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleWatchlistAdd, selectUser } from '../../features/auth-slice';
+import { WatchlistBtn } from '../WatchlistBtn';
+import { calcAverageFromArr } from '../../utils/calvAvg';
 
 export const SearchMovie = ({ movie }) => {
   const [averageRating, setAverageRating] = useState(0);
-  const PF = 'http://localhost:5000/images/';
+  const [currentUserRating, setCurrentUserRating] = useState(null);
 
-  useEffect(() => {
-    const sumRating = movie.ratings.reduce((prev, next) => prev + next, 0);
-    setAverageRating((sumRating / movie.ratings.length).toFixed(1));
-  }, [movie.ratings]);
-
+  const ratingRef = useRef();
   const user = useSelector(selectUser);
+ 
+  useEffect(() => {
+    const avgRating = calcAverageFromArr(movie, 'ratings', 'rating');
+
+    setAverageRating(avgRating);
+
+    if (!isNaN(avgRating)) {
+      avgRating >= 7
+        ? (ratingRef.current.style.backgroundColor = 'darkgreen')
+        : avgRating >= 4
+        ? (ratingRef.current.style.backgroundColor = 'orange')
+        : avgRating > 0
+        ? (ratingRef.current.style.backgroundColor = 'darkred')
+        : (ratingRef.current.style.backgroundColor = 'unset');
+    }
+
+    const rating = movie.ratings.find(
+      (rating) => rating.username === user?._id
+    );
+    rating && setCurrentUserRating(rating.rating);
+  }, [movie.ratings, user?._id, movie]);
 
   return (
     <div className={styles.searchMoviesListItem}>
@@ -22,7 +41,7 @@ export const SearchMovie = ({ movie }) => {
         <div className={styles.searchMovieListItemMask}>
           <Link to={`/movie/${movie._id}`}>
             <img
-              src={PF + movie.imgSmall}
+              src={movie.imgSmall}
               alt=""
               className={styles.searchMoviesListItemImg}
             />
@@ -38,7 +57,15 @@ export const SearchMovie = ({ movie }) => {
           <span className={styles.searchMoviesListItemCountry}>
             {movie.country}
           </span>{' '}
-          <span className={styles.searchMoviesListItemGenre}>Drama</span>{' '}
+          <div className={styles.searchMoviesListItemGenres}>
+            {movie.genres.map((genre, i) => {
+              return (
+                <span className={styles.searchMoviesListItemGenre} key={i}>
+                  {genre}
+                </span>
+              );
+            })}
+          </div>
           <span className={styles.searchMoviesListItemCreator}>
             Director: {movie.director}{' '}
           </span>
@@ -47,21 +74,25 @@ export const SearchMovie = ({ movie }) => {
           </p>
         </div>
       </div>
+
       <div className={styles.searchMoviesListItemAdd}>
-        <p className={styles.searchMoviesListItemRating}>{averageRating}</p>
-        <div className={styles.searchMoviesListItemWatchlist}>
-          <i
-            className={
-              styles.searchMoviesListItemWatchlistIcon +
-              ' fa-regular fa-bookmark'
-            }
-          ></i>
-          <p className={styles.searchMoviesListItemWatchlistText}>
-            <Link to={!user && '/login'}>Add to watchlist</Link>
+        <div className={styles.searchMoviesListItemAddButtons}>
+          <p className={styles.searchMoviesListItemRating} ref={ratingRef}>
+            {!isNaN(averageRating) ? averageRating : 'No rating'}
           </p>
+          <WatchlistBtn movie={movie} user={user} />
+          <div className={styles.searchMoviesListItemWatchlistIcon}>
+            <StarRating active={false} id={movie._id} ratings={movie.ratings} />
+          </div>
         </div>
-        <div className={styles.searchMoviesListItemWatchlistIcon}>
-          <StarRating active={false} id={movie._id} />
+        <div className={styles.searchMoviesListItemUserRating}>
+          {currentUserRating ? (
+            <p>
+              You rated is as <span>{currentUserRating}</span>
+            </p>
+          ) : (
+            <p>You didn't rate this movie yet</p>
+          )}
         </div>
       </div>
     </div>

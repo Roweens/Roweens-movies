@@ -13,10 +13,13 @@ export const uploadMovie = createAsyncThunk(
 
 export const getAllMovies = createAsyncThunk(
   '@@movie/all',
-  (queries, { extra: { axios } }) => {
+  ({ search, page }, { extra: { axios } }) => {
     try {
-      console.log(queries);
-      const res = axios.get('/movies/' + queries);
+      const res = axios.get('/movies/' + search, {
+        params: {
+          page,
+        },
+      });
       return res;
     } catch (error) {
       console.log(error);
@@ -28,7 +31,20 @@ export const getSingleMovie = createAsyncThunk(
   '@movie/single',
   (id, { extra: { axios } }) => {
     try {
-      const res = axios.get('/movies/' + id);
+      const res = axios.get('/movies/find/' + id);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getRandomMovie = createAsyncThunk(
+  '@movie/random',
+  (_, { extra: { axios } }) => {
+    try {
+      console.log('123');
+      const res = axios.get('/movies/random');
       return res;
     } catch (error) {
       console.log(error);
@@ -38,9 +54,9 @@ export const getSingleMovie = createAsyncThunk(
 
 export const rateMovie = createAsyncThunk(
   '@movie/rate',
-  ({ id, ratingValue }, { extra: { axios } }) => {
+  ({ id, ratingValue, userId }, { extra: { axios } }) => {
     try {
-      axios.put(`/movies/${id}`, { id: id, rating: ratingValue });
+      axios.put(`/movies/${id}`, { id: id, rating: ratingValue, userId });
     } catch (error) {
       console.log(error);
     }
