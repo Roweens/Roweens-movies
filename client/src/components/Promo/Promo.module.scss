@@ -1,3 +1,4 @@
+@import '../../index.scss';
 .promo {
   font-family: 'Oswald', sans-serif;
   display: flex;
@@ -7,7 +8,7 @@
   margin: 0 auto;
   padding-left: 40px;
   position: relative;
-  z-index: 999;
+  z-index: 76;
   .promoImgContainer {
     &::after {
       content: '';
@@ -41,13 +42,21 @@
     justify-content: center;
 
     .promoTitle {
-      font-size: 120px;
-      margin-block-start: 0;
+      font-size: 110px;
+      line-height: 120px;
+
+      @include fullhd {
+        font-size: 85px;
+      }
+      @include laptop {
+        line-height: 80px;
+        font-size: 60px;
+      }
     }
     .promoCategories {
       list-style: none;
       display: flex;
-      padding-inline-start: 0;
+
       .promoCategory {
         background-color: #292a2b;
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -76,7 +85,7 @@
         transform: scale(1.05);
         filter: brightness(0.9);
       }
-      .promoButton {  
+      .promoButton {
         border: none;
         outline: none;
         background-color: unset;

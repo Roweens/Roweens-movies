@@ -1,3 +1,4 @@
+@import '../../index.scss';
 :global {
   body[data-theme='light'] {
     --search-color: var(--white-100);
@@ -21,6 +22,9 @@
   padding-top: 30px;
   display: flex;
   justify-content: space-between;
+  @include tablet {
+    flex-direction: column;
+  }
   &:first-child {
     border-top: none;
   }
@@ -44,6 +48,9 @@
       height: 100%;
       object-fit: cover;
       border-radius: 3px;
+      @include phone {
+        width: 120px;
+      }
     }
     .searchMoviesListItemMainText {
       margin-left: 30px;
@@ -75,10 +82,17 @@
           background-color: var(--search-secondary-text-color);
           border-radius: 50%;
         }
+        @include laptop {
+          &::after {
+            content: none;
+          }
+        }
       }
       .searchMoviesListItemGenres {
         display: inline-block;
-
+        @include laptop {
+          display: block;
+        }
         .searchMoviesListItemGenre {
           color: var(--search-secondary-text-color);
           &:after {
@@ -98,6 +112,11 @@
       .searchMoviesListItemCreator {
         color: var(--search-secondary-text-color);
         margin-left: 15px;
+        @include laptop {
+          display: block;
+          margin-top: 10px;
+          margin-left: 0;
+        }
       }
       .searchMoviesListItemActors {
         color: var(--search-secondary-text-color);
@@ -106,6 +125,9 @@
     }
   }
   .searchMoviesListItemAdd {
+    @include tablet {
+      margin-top: 30px;
+    }
     .searchMoviesListItemAddButtons {
       display: flex;
       align-items: center;
@@ -140,6 +162,10 @@
       justify-content: flex-end;
       margin-top: 30px;
       font-size: 16px;
+      @include tablet {
+        justify-content: flex-start;
+        margin-top: 20px;
+      }
       span {
         font-size: 18px;
         font-weight: 700;

@@ -1,0 +1,57 @@
+:global {
+  body[data-theme='light'] {
+    --trending-color: var(--white-100);
+    --trending-title-color: var(--gray-500);
+    --trending-arrow-color: var();
+  }
+  body[data-theme='dark'] {
+    --trending-color: var(--gray-500);
+    --trending-title-color: var(--white-100);
+    --trending-arrow-color: var(--white-100);
+  }
+}
+
+.trending {
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  color: var(--trending-title-color);
+  background-color: var(--trending-color);
+  padding: 0 40px 50px 50px;
+  overflow: hidden;
+  .trendingTitle {
+    margin: 35px 0 20px 0;
+    cursor: pointer;
+    .trendingTitleColored {
+      color: #337fc3;
+    }
+  }
+
+  .trendingRightArrow,
+  .trendingLeftArrow {
+    font-size: 60px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 999;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .trendingLeftArrow {
+    left: 0;
+  }
+  .trendingRightArrow {
+    right: 0;
+  }
+
+  .trendingMovies {
+    display: flex;
+    max-width: 300px;
+    overflow-x: visible;
+    gap: 16px;
+    transform: translateX(0px);
+    transition: all 1s ease;
+  }
+}

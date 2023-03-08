@@ -1,3 +1,4 @@
+@import '../../index.scss';
 :global {
   body[data-theme='light'] {
     --sidebar-list-color: var(--white-200);
@@ -14,20 +15,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 40px;
   padding-top: 30px;
   background-color: var(--sidebar-list-color);
+  font-family: 'Poppins', sans-serif;
+  @include phone {
+    display: none;
+  }
   .sidebarListWrapper {
     .sidebarListCategory {
       .sidebarListCategoryTitle {
-        font-family: 'Poppins', sans-serif;
-        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .sidebarListWarning {
+        font-size: 30px;
+        font-family: inherit;
+        max-width: 400px;
+        text-align: center;
+        line-height: 50px;
       }
     }
     .sidebarListLine {
       width: 80%;
       height: 2px;
       background-color: rgb(72, 71, 68);
-      margin: 40px auto;
+      margin: 20px auto;
     }
   }
 }

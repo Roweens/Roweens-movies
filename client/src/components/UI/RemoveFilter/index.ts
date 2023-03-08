@@ -1,1 +1,1 @@
-export * from './RemoveFilter.jsx';
+export * from './RemoveFilter';

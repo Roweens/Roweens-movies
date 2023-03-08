@@ -1,3 +1,4 @@
+@import '../../index.scss';
 :global {
   --search-button-color: var(--button-light-color);
   --search-main-color: var(--main-color);
@@ -21,12 +22,35 @@
   font-family: 'Poppins', sans-serif;
   color: var(--search-main-text-color);
   background-color: var(--search-color);
-
+  @include landscapeTablet {
+    width: 95%;
+  }
+  @include phone {
+    display: flex;
+    flex-direction: column;
+  }
   .searchMoviesFiltersWrapper {
     padding: 140px 70px 100px 75px;
     position: relative;
+    @include laptop {
+      padding: 140px 0 100px 40px;
+    }
+    @include landscapeTablet {
+      padding: 140px 0 100px 40px;
+    }
+    @include phone {
+      padding-top: 20px;
+      padding-bottom: 10px;
+    }
     .searchMoviesFiltersTitle {
       font-size: 50px;
+      @include tablet {
+        font-size: 40px;
+        color: #337fc3;
+      }
+      @include phone {
+        font-size: 30px;
+      }
     }
     .searchMoviesFiltersRemove {
       padding-top: 20px;
@@ -36,19 +60,41 @@
     .searchMoviesFilters {
       position: sticky;
       top: 30px;
+      @include phone {
+        padding-left: 30px;
+      }
       .searchMoviesFilterTitle {
         margin-top: 80px;
         margin-bottom: 15px;
         font-size: 26px;
+        @include laptop {
+          margin-top: 60px;
+        }
+        @include landscapeTablet {
+          margin-top: 40px;
+        }
+        @include phone {
+          margin-top: 20px;
+        }
       }
     }
   }
 
   .searchMoviesListWrapper {
     padding: 50px 70px 100px 50px;
+    @include phone {
+      padding: 20px 30px 100px 20px;
+    }
     .searchMoviesListTitle {
       font-size: 50px;
       margin-bottom: 40px;
+      @include tablet {
+        font-size: 40px;
+      }
+      @include phone {
+        margin-bottom: 10px;
+        color: #337fc3;
+      }
     }
 
     .searchMoviesCatsWrapper {
@@ -57,10 +103,18 @@
       align-items: center;
       border-bottom: 2px solid var(--search-border-color);
       padding-bottom: 15px;
+      @include phone {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
       .searchMoviesCats {
         display: flex;
         gap: 60px;
         font-size: 22px;
+        @include tablet {
+          gap: 25px;
+        }
         .searchMoviesCat {
           cursor: pointer;
           .searchMoviesCatTitle {
@@ -78,6 +132,25 @@
         }
       }
     }
+
+    .pageNumber {
+      margin-top: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span {
+        margin-right: 20px;
+        border: 1px solid white;
+        padding: 15px;
+        cursor: pointer;
+        &:hover {
+          background-color: gray;
+        }
+      }
+      .active {
+        background-color: gray;
+      }
+    }
   }
   select {
     font-family: inherit;
@@ -86,6 +159,13 @@
     border-radius: 5px;
     color: var(--search-color);
     background-color: var(--search-border-color);
+  }
+
+  .searchMoviesListNotFound {
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
   }
 }
 .dynamic {

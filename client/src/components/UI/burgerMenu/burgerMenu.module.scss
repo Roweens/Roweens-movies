@@ -1,0 +1,76 @@
+@import '../../../index.scss';
+:global {
+  body[data-theme='light'] {
+    --burger-color: var(--gray-300);
+    --burger-text-color: var(--gray-500);
+    --burger-line-color: var(--gray-400);
+  }
+  body[data-theme='dark'] {
+    --burger-color: var(--gray-400);
+    --burger-text-color: var(--gray-200);
+    --burger-line-color: var(--gray-200);
+  }
+}
+
+.burgerMenu {
+  position: absolute;
+  background-color: var(--burger-color);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+
+  .burgerMenuIcon {
+    margin: 20px 0 0 20px;
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .Navbar {
+    .NavbarList {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 150px;
+      .NavbarListItem {
+        font-size: 20px;
+        margin-top: 10px;
+        color: var(--burger-text-color);
+        cursor: pointer;
+        &:hover {
+          color: #337fc3;
+        }
+      }
+    }
+  }
+}
+
+.burgerIcon {
+  margin-left: 20px;
+  cursor: pointer;
+  display: none;
+  @include phone {
+    display: block;
+  }
+  .burgerLine {
+    display: block;
+    width: 25px;
+    height: 4px;
+    background-color: var(--burger-line-color);
+    margin-bottom: 5px;
+  }
+  &:hover {
+    transform: scale(1.05);
+    .burgerLine {
+      background-color: #337fc3;
+    }
+  }
+
+  .disabled {
+    display: none;
+  }
+}

@@ -1,1 +1,37 @@
-.customInput {}
+.customInputWrapper {
+  margin-top: 10px;
+  .customTextInputLabel {
+    display: block;
+    font-size: 20px;
+  }
+  .customFileInputLabel {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    font-size: 20px;
+    .customInputIcon {
+      margin-top: 10px;
+      font-size: 45px;
+      transition: transform 0.3s ease, color 0.3s ease;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.1);
+        color: #337fc3;
+      }
+    }
+  }
+  .customTextInput {
+    outline: none;
+    border: 1px solid var(--login-border-color);
+    padding: 8px 8px;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: border 0.05s ease;
+    &:focus {
+      border: 2px solid #337fc3;
+    }
+  }
+  .customFileInput {
+    display: none;
+  }
+}

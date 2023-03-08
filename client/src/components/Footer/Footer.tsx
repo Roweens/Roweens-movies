@@ -20,7 +20,10 @@ export const Footer = () => (
       <p className={styles.footerOwnershipDate}>
         © 2022 — 2023, Roweens Movies
       </p>
-      <a href="#" className={styles.footerOwnershipLink}>
+      <a
+        href="https://github.com/Roweens/Roweens-movies"
+        className={styles.footerOwnershipLink}
+      >
         GitHub Repo
       </a>
     </div>

@@ -1,3 +1,4 @@
+@import '../../index.scss';
 :global {
   body[data-theme='light'] {
     --settings-color: white;
@@ -20,115 +21,129 @@
   padding: 50px 150px 50px 50px;
   color: var(--settings-font-color);
   border: 1px solid black;
+  @include phone {
+    width: 75%;
+  }
   .userSettingsTitle {
     font-size: 45px;
     margin-bottom: 50px;
+    @include landscapePhone {
+      font-size: 30px;
+    }
   }
 
   .userSettingsForm {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    flex-wrap: wrap;
-    .userSettingsMain {
-      flex-basis: 60%;
-      .userSettingsInputWrapper {
-        margin-top: 25px;
-        .userSettingsLabel {
-          display: block;
-          font-size: 20px;
-          margin-bottom: 6px;
-        }
-        .userSettingsInput {
-          outline: none;
-          border: 1px solid var(--login-border-color);
-          padding: 8px 8px;
-          border-radius: 5px;
-          font-size: 18px;
-          transition: border 0.05s ease;
-          &:focus {
-            border: 2px solid #337fc3;
+
+    .userSettingsInputs {
+      display: flex;
+      @include landscapeTablet {
+        gap: 50px;
+        flex-direction: column;
+      }
+      .userSettingsMain {
+        flex-basis: 60%;
+        .userSettingsInputWrapper {
+          margin-top: 25px;
+          .userSettingsLabel {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 6px;
+          }
+          .userSettingsInput {
+            outline: none;
+            border: 1px solid var(--login-border-color);
+            padding: 8px 8px;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: border 0.05s ease;
+            &:focus {
+              border: 2px solid #337fc3;
+            }
           }
         }
-      }
 
-      .userSettingsFileInputWrapper {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-        margin-bottom: 40px;
-        .userSettingsImg {
-          width: 90px;
-          height: 90px;
-          object-fit: cover;
-          border-radius: 50%;
-        }
-        .userSettingsFileInput {
-          display: none;
-        }
-        .userSettingsFileLabel {
-          .userSettingsFileIcon {
-            font-size: 45px;
-            transition: transform 0.3s ease, color 0.3s ease;
-            cursor: pointer;
-            &:hover {
-              transform: scale(1.1);
-              color: #337fc3;
+        .userSettingsFileInputWrapper {
+          display: flex;
+          align-items: center;
+          gap: 30px;
+          margin-bottom: 40px;
+          .userSettingsImg {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+          .userSettingsFileInput {
+            display: none;
+          }
+          .userSettingsFileLabel {
+            .userSettingsFileIcon {
+              font-size: 45px;
+              transition: transform 0.3s ease, color 0.3s ease;
+              cursor: pointer;
+              &:hover {
+                transform: scale(1.1);
+                color: #337fc3;
+              }
             }
           }
         }
       }
-    }
-    .userSettingsAdditional {
-      flex-basis: 30%;
-      .userSettingsAdditionalTitle {
-        margin-bottom: 10px;
-        font-size: 20px;
-      }
-      .userSettingsGenderWrapper {
-        position: relative;
-        .userSettingsGender {
-          display: flex;
-          width: 150px;
-          color: black;
-          background-color: white;
-          padding: 5px 10px;
-          justify-content: space-between;
-          align-items: baseline;
-          border-radius: 4px;
-          cursor: pointer;
+      .userSettingsAdditional {
+        flex-basis: 30%;
+        .userSettingsAdditionalTitle {
+          margin-bottom: 10px;
+          font-size: 20px;
         }
-
-        .userSettingsRadioInputWrapper {
-          display: flex;
-          flex-direction: column;
-          position: absolute;
-          top: 120%;
-          background-color: white;
-          color: black;
-          padding: 0 30px 10px 10px;
-          border-radius: 4px;
-          .userSettingsRadioInput {
-            display: none;
-          }
-          .userSettingsRadioLabel {
-            cursor: pointer;
-            margin-top: 10px;
-          }
-        }
-      }
-      .userSettingsAdditionalDateTitle {
-        margin-top: 30px;
-        font-size: 20px;
-      }
-      .userSettingsDate {
-        margin-top: 10px;
-        display: flex;
-        gap: 10px;
-        .userSettingsDateSelectWrapper {
-          .userSettingsDateSelect {
-            font-family: 'Poppins', sans-serif;
+        .userSettingsGenderWrapper {
+          position: relative;
+          .userSettingsGender {
+            display: flex;
+            width: 150px;
+            color: black;
+            background-color: white;
+            padding: 5px 10px;
+            justify-content: space-between;
+            align-items: baseline;
             border-radius: 4px;
-            padding: 5px 10px 5px 0px;
+            cursor: pointer;
+          }
+
+          .userSettingsRadioInputWrapper {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 120%;
+            background-color: white;
+            color: black;
+            padding: 0 30px 10px 10px;
+            border-radius: 4px;
+            .userSettingsRadioInput {
+              display: none;
+            }
+            .userSettingsRadioLabel {
+              cursor: pointer;
+              margin-top: 10px;
+            }
+          }
+        }
+        .userSettingsAdditionalDateTitle {
+          margin-top: 30px;
+          font-size: 20px;
+        }
+        .userSettingsDate {
+          margin-top: 10px;
+          display: flex;
+          gap: 10px;
+          .userSettingsDateSelectWrapper {
+            .userSettingsDateSelect {
+              font-family: 'Poppins', sans-serif;
+              border-radius: 4px;
+              padding: 5px 10px 5px 0px;
+            }
           }
         }
       }

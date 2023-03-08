@@ -1,9 +1,16 @@
+@import '../../index.scss';
+
 .sidebarMovie {
   display: flex;
   align-items: center;
   font-family: 'Oswald', sans-serif;
   padding-bottom: 30px;
-
+  @include landscapeTablet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
   &:hover {
     .sidebarMovieInfoTitle {
       color: #337fc3;
@@ -39,6 +46,10 @@
   .sidebarMovieInfo {
     cursor: pointer;
     margin-left: 40px;
+    @include landscapeTablet {
+      margin-top: 15px;
+      margin-left: 0;
+    }
     .sidebarMovieInfoTitle {
       font-size: 20px;
     }

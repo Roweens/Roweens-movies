@@ -1,3 +1,5 @@
+@import '../../index.scss';
+
 :global {
   body[data-theme='light'] {
     --header-color: var(--white-100);
@@ -22,6 +24,17 @@
     padding-left: 60px;
     cursor: pointer;
     transition: all 0.2s ease;
+    line-height: 40px;
+    @include landscapeTablet {
+      padding-left: 25px;
+      h1 {
+        font-size: 24px;
+        line-height: 30px;
+      }
+    }
+    @include tablet {
+      display: none;
+    }
     &:hover {
       transform: scale(1.05);
     }
@@ -35,7 +48,6 @@
 
     .headerNavbarList {
       display: flex;
-      list-style: none;
       .headerNavbarListItem {
         font-size: 20px;
         margin-left: 60px;
@@ -46,6 +58,23 @@
           transform: matrix(1.1, 0, 0, 1.1, 0, -10);
           color: #337fc3;
         }
+
+        @include laptop {
+          margin-left: 30px;
+        }
+        @include landscapeTablet {
+          margin-left: 20px;
+          font-size: 18px;
+        }
+        @include tablet {
+          font-size: 18px;
+        }
+        @include landscapePhone {
+          margin-left: 15px;
+        }
+      }
+      @include phone {
+        display: none;
       }
     }
   }
@@ -56,12 +85,15 @@
     flex: 20%;
     align-items: center;
     padding-right: 60px;
-
+    @include landscapeTablet {
+      padding-right: 25px;
+    }
     .headerInfoIcon {
       margin-right: 30px;
       font-size: 22px;
       cursor: pointer;
       transition: all 0.2s ease;
+      vertical-align: middle;
       &:hover {
         font-size: 27px;
         color: #337fc3;

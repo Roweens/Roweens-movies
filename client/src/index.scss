@@ -1,0 +1,160 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+:root {
+  --main-color: #337fc3;
+  --button-light-color: #e5e0e0;
+  --gray-200: rgb(208, 208, 208);
+  --gray-300: rgb(164, 164, 164);
+  --gray-400: #292a2b;
+  --gray-500: #141414;
+  --white-100: white;
+  --white-200: #f6f8ff;
+  --black: rgb(11, 11, 11);
+}
+
+body[data-theme='light'] {
+  --homepage-color: var(--white-200);
+}
+body[data-theme='dark'] {
+  --homepage-color: var(--black);
+}
+
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+li,
+p,
+span {
+  padding: 0;
+  margin: 0;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+.homepage {
+  background-color: var(--homepage-color);
+  padding-bottom: 40px;
+}
+
+.adminpage {
+  background-color: var(--homepage-color);
+  padding: 40px 0;
+  height: 100vh;
+}
+
+.moviepage {
+  background-color: var(--homepage-color);
+}
+.searchpage {
+  background-color: var(--homepage-color);
+  padding: 40px 0;
+}
+.userpage {
+  background-color: var(--homepage-color);
+  padding: 20px 0;
+}
+
+.watchpage {
+  height: calc(100vh - 351px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--homepage-color);
+}
+
+.video-container {
+  position: relative;
+  height: 100%;
+}
+
+.video {
+  height: 100%;
+}
+
+.error-page {
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  height: 100vh;
+  background-color: #141414;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 35px;
+  a {
+    margin-top: 40px;
+    text-decoration: underline;
+  }
+}
+
+.back-arrow {
+  position: absolute;
+  top: 2%;
+  padding: 20px;
+  background-color: white;
+  left: -2%;
+  color: black;
+  font-size: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 50;
+}
+
+a {
+  color: unset;
+  text-decoration: unset;
+}
+
+@mixin fullhd {
+  @media (max-width: 1921px) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (max-width: 1500px) {
+    @content;
+  }
+}
+
+@mixin landscapeTablet {
+  @media (max-width: 1199px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 991px) {
+    @content;
+  }
+}
+
+@mixin landscapePhone {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media (max-width: 479px) {
+    @content;
+  }
+}
+
+@mixin wearable {
+  @media (max-width: 320px) {
+    @content;
+  }
+}

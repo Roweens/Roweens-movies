@@ -1,3 +1,5 @@
+@import '../../index.scss';
+
 :global {
   body[data-theme='light'] {
     --top-text-color: var(--gray-500);
@@ -13,6 +15,10 @@
   color: var(--top-text-color);
   font-family: 'Poppins', sans-serif;
   position: relative;
+  @include phone {
+    margin-bottom: 50px;
+  }
+
   &:hover {
     color: var(--top-movie-title-color) !important;
     .topMoviePoster::before {
@@ -20,10 +26,13 @@
     }
   }
   .topMoviePoster {
-    height: auto;
+    height: 300px;
     position: relative;
     line-height: 0.7;
     cursor: pointer;
+    @include laptop {
+      height: 250px;
+    }
     &::before {
       content: '';
       position: absolute;
@@ -41,6 +50,7 @@
       width: 100%;
       height: 100%;
       border-radius: 4px;
+      object-fit: cover;
       &:last-child {
         margin-right: 0px;
       }
@@ -52,8 +62,6 @@
       color: white;
       padding: 6px 9px;
       border-radius: 5px;
-      margin-block-start: 0;
-      margin-block-end: 0;
       margin: 14px 0 0 10px;
     }
   }

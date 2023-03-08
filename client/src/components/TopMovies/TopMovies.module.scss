@@ -1,3 +1,5 @@
+@import '../../index.scss';
+
 :global {
   body[data-theme='light'] {
     --top-color: var(--white-100);
@@ -31,5 +33,12 @@
     grid-template-columns: repeat(auto-fill, minmax(100px, 200px));
     gap: 20px;
     justify-content: space-between;
+
+    @include laptop {
+      grid-template-columns: repeat(auto-fill, minmax(1fr, 150px));
+    }
+    @include landscapePhone {
+      grid-template-columns: repeat(2, minmax(150px, 100px));
+    }
   }
 }

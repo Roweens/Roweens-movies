@@ -33,28 +33,17 @@ router.post('/add', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const type = req.query.type;
-  const page = req.query.page;
-
-  const options = {
-    page: page,
-    limit: 10,
-    collation: {
-      locale: 'en',
-    },
-  };
-
+  console.log('123');
   try {
     let movies;
 
     if (type) {
-      movies = await Movie.paginate({ type: type }, options);
+      movies = await Movie.find({ type: type });
     } else {
-      movies = await Movie.paginate({}, options);
+      movies = await Movie.find({});
     }
 
-    const count = await Movie.countDocuments({});
-    res.set('total-count', count);
-    res.status(201).json(movies.docs);
+    res.status(201).json(movies);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -63,9 +52,25 @@ router.get('/', async (req, res) => {
 //Get random movie
 
 router.get('/random', async (req, res) => {
+  const param = req.query.param;
+
   try {
-    const randomMovie = await Movie.aggregate([{ $sample: { size: 1 } }]);
-    res.status(200).json(randomMovie);
+    if (param === 'toprated') {
+      const movies = await Movie.find({});
+
+      const topRatedMovies = movies
+        .filter(
+          (movie) =>
+            movie.ratings.reduce((acc, next) => acc + next.rating, 0) > 7
+        )
+        .slice(0, 12);
+      res.status(200).json(topRatedMovies);
+    } else {
+      const randomMovie = await Movie.aggregate([
+        { $sample: { size: parseInt(req.query.size) } },
+      ]);
+      res.status(200).json(randomMovie);
+    }
   } catch (error) {
     res.status(500).json(error);
   }

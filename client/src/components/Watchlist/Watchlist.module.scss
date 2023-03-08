@@ -1,0 +1,48 @@
+@import '../../index.scss';
+.watchlist {
+  width: 50%;
+  background-color: var(--settings-color);
+  margin: 0 auto;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  padding: 50px 150px 50px 50px;
+  color: var(--settings-font-color);
+  border: 1px solid black;
+  margin-bottom: 30px;
+  @include phone {
+    padding: 30px 70px 50px 70px;
+  }
+  @include laptop {
+    width: 75%;
+  }
+  .watchlistTitle {
+    font-size: 45px;
+    margin-bottom: 30px;
+    @include landscapePhone {
+      font-size: 30px;
+    }
+  }
+
+  .watchlistList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 200px));
+    gap: 20px;
+    justify-content: space-between;
+    @include tablet {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 160px));
+    }
+    @include phone {
+      display: block;
+    }
+  }
+
+  .watchlistButton {
+    margin-top: 50px;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 500;
+    @include phone {
+      margin-top: 0;
+    }
+  }
+}
